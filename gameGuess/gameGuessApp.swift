@@ -1,17 +1,30 @@
-//
-//  gameGuessApp.swift
-//  gameGuess
-//
-//  Created by Civan Metin on 2024-05-10.
-//
-
 import SwiftUI
+import Combine
 
-@main
-struct gameGuessApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+class GuessingGame: ObservableObject {
+    let objectWillChange = ObservableObjectPublisher()
+    
+    let targetNumber: Int
+    let range: ClosedRange<Int>
+    
+    init(range: ClosedRange<Int>) {
+        self.range = range
+        self.targetNumber = Int.random(in: range)
+    }
+    
+    func guess(number: Int) -> GuessResult {
+        if number == targetNumber {
+            return .correct
+        } else if number < targetNumber {
+            return .tooLow
+        } else {
+            return .tooHigh
         }
     }
+}
+
+enum GuessResult {
+    case correct
+    case tooLow
+    case tooHigh
 }
